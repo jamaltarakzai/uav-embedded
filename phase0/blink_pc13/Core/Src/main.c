@@ -31,7 +31,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LED_ON()   HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET)
+#define LED_OFF()  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -42,7 +43,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t mode = 2;   // 1 = Ready, 2 = GPS search, 3 = Error
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,6 +55,19 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+/* USER CODE BEGIN 0 */
+void blink(uint8_t times, uint32_t on_ms, uint32_t off_ms)
+{
+    for (uint8_t i = 0; i < times; i++)
+    {
+        LED_ON();
+        HAL_Delay(on_ms);
+        LED_OFF();
+        HAL_Delay(off_ms);
+    }
+}
+/* USER CODE END 0 */
 
 /* USER CODE END 0 */
 
@@ -97,11 +111,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	  HAL_Delay(200);
-  }
+    // Heartbeat: dhak-dhak ... dhak-dhak ...
+    LED_ON();  HAL_Delay(700);   // pehli dhak
+    LED_OFF(); HAL_Delay(100);
+    LED_ON();  HAL_Delay(200);   // doosri dhak
+    LED_OFF(); HAL_Delay(1000);   // lamba aaraam
+  }   // while(1) band
   /* USER CODE END 3 */
-}
+}     // main() band
 
 /**
   * @brief System Clock Configuration
